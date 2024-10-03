@@ -1,11 +1,12 @@
 import { FC } from "react";
 import { Contest } from "../../types/Contest.ts";
 import { Button, ListItem, ListItemText } from "@mui/material";
+import { useNavigate } from "react-router-dom"; // Импортируем функцию навигации
 
 interface ContestListItemProps {
   contest: Contest;
   onJoinContest?: (contestId: number) => void;
-  canJoin: boolean; // Добавляем проп для проверки возможности вступления
+  canJoin: boolean; // Проп для проверки возможности вступления
 }
 
 const ContestListItem: FC<ContestListItemProps> = ({
@@ -13,8 +14,18 @@ const ContestListItem: FC<ContestListItemProps> = ({
   onJoinContest,
   canJoin,
 }) => {
+  const navigate = useNavigate(); // Создаем функцию для навигации
+
+  const handleClick = () => {
+    if (!canJoin) {
+      navigate(`/main/contest/${contest.id}`); // Переход на страницу контеста
+    }
+  };
+
   return (
-    <ListItem>
+    <ListItem button={!canJoin} onClick={handleClick}>
+      {" "}
+      {/* Условие для клика */}
       <ListItemText primary={contest.name} />
       {canJoin && onJoinContest && (
         <Button
