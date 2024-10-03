@@ -23,19 +23,25 @@ const ContestListItem: FC<ContestListItemProps> = ({
   };
 
   return (
-    <ListItem button={!canJoin} onClick={handleClick}>
-      {" "}
-      {/* Условие для клика */}
+    <ListItem
+      onClick={handleClick}
+      disableGutters // Убираем отступы по краям, чтобы button выглядел лучше
+      secondaryAction={
+        canJoin && onJoinContest ? (
+          <Button
+            variant="text"
+            color="primary"
+            onClick={(e) => {
+              e.stopPropagation(); // Останавливаем всплытие события
+              onJoinContest(contest.id);
+            }}
+          >
+            Join
+          </Button>
+        ) : null
+      }
+    >
       <ListItemText primary={contest.name} />
-      {canJoin && onJoinContest && (
-        <Button
-          variant="text"
-          color="primary"
-          onClick={() => onJoinContest(contest.id)}
-        >
-          Join
-        </Button>
-      )}
     </ListItem>
   );
 };
